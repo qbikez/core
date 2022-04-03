@@ -62,8 +62,8 @@ def write_utf8_file(
         ) as fdesc:
             fdesc.write(utf8_data)
             tmp_filename = fdesc.name
-            if not private:
-                os.fchmod(fdesc.fileno(), 0o644)
+            # if not private:
+            #     os.fchmod(fdesc.fileno(), 0o644)
         os.replace(tmp_filename, filename)
     except OSError as error:
         _LOGGER.exception("Saving file failed: %s", filename)

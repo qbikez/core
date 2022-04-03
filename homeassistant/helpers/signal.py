@@ -27,17 +27,17 @@ def async_register_signal_handling(hass: HomeAssistant) -> None:
 
     try:
         hass.loop.add_signal_handler(signal.SIGTERM, async_signal_handle, 0)
-    except ValueError:
+    except Exception:
         _LOGGER.warning("Could not bind to SIGTERM")
 
     try:
         hass.loop.add_signal_handler(signal.SIGINT, async_signal_handle, 0)
-    except ValueError:
+    except Exception:
         _LOGGER.warning("Could not bind to SIGINT")
 
     try:
         hass.loop.add_signal_handler(
             signal.SIGHUP, async_signal_handle, RESTART_EXIT_CODE
         )
-    except ValueError:
+    except Exception:
         _LOGGER.warning("Could not bind to SIGHUP")
