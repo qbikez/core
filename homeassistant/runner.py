@@ -48,7 +48,7 @@ class RuntimeConfig:
     open_ui: bool = False
 
 
-class HassEventLoopPolicy(asyncio.DefaultEventLoopPolicy):  # type: ignore[valid-type,misc]
+class HassEventLoopPolicy(asyncio.WindowsSelectorEventLoopPolicy):  # type: ignore[valid-type,misc]
     """Event loop policy for Home Assistant."""
 
     def __init__(self, debug: bool) -> None:
