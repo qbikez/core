@@ -187,7 +187,6 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     adapters = await network.async_get_adapters(hass)
 
-    ipv6 = False
     if _async_zc_has_functional_dual_stack():
         if any(adapter["enabled"] and adapter["ipv6"] for adapter in adapters):
             ipv6 = True
@@ -199,20 +198,21 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     if not ipv6 and network.async_only_default_interface_enabled(adapters):
         zc_args["interfaces"] = InterfaceChoice.Default
     else:
-        zc_args["interfaces"] = [
-            str(source_ip)
-            for source_ip in await network.async_get_enabled_source_ips(hass)
-            if not source_ip.is_loopback
-            and not (isinstance(source_ip, IPv6Address) and source_ip.is_global)
-            and not (
-                isinstance(source_ip, IPv6Address)
-                and zc_args["ip_version"] == IPVersion.V4Only
-            )
-            and not (
-                isinstance(source_ip, IPv4Address)
-                and zc_args["ip_version"] == IPVersion.V6Only
-            )
-        ]
+        zc_args["interfaces"] = InterfaceChoice.All
+        # zc_args["interfaces"] = [
+        #     str(source_ip)
+        #     for source_ip in await network.async_get_enabled_source_ips(hass)
+        #     if not source_ip.is_loopback
+        #     and not (isinstance(source_ip, IPv6Address) and source_ip.is_global)
+        #     and not (
+        #         isinstance(source_ip, IPv6Address)
+        #         and zc_args["ip_version"] == IPVersion.V4Only
+        #     )
+        #     and not (
+        #         isinstance(source_ip, IPv4Address)
+        #         and zc_args["ip_version"] == IPVersion.V6Only
+        #     )
+        # ]
 
     aio_zc = await _async_get_instance(hass, **zc_args)
     zeroconf = cast(HaZeroconf, aio_zc.zeroconf)
