@@ -1,0 +1,17 @@
+{
+  "name": "ha-win",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently -p name -n \"MQTT,BLE,HASS\" -c \"magenta,cyan,blue\" \"npm run start:mqtt\" \"npm run start:ble\" \"npm run start:hass\"",
+    "start:mqtt": "cd ../mqtt && docker-compose up",
+    "start:ble": "cd ../ble-forwarder && dotnet run",
+    "start:hass": "cd ../../github/home-assistant/venv/scripts/ && hass.exe -c ../../config/"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
